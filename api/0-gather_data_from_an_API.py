@@ -9,8 +9,8 @@ if __name__ == "__main__":
     """retrieve command line arg when running script"""
     uid= argv[1]
     """counter variables to 0 and starts counting from there"""
-    all_tasks = 0
-    done_task = 0
+    TOTAL_NUMBER_OF_TASKS = 0
+    NUMBER_OF_DONE_TASKS = 0
 
     """Get JSON doct for requested user and all TODOs"""
     user = requests.get("https://jsonplaceholder.typicode.com/users/{}"
@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     """retrieves the value associated with the key "name" from dict 'user'
     using the .get() method"""
-    name = user.get("name")
+    EMPLOYEE_NAME = user.get("name")
 
     """Get all tasks and completed tasks numbers, and the user completed tasks"""
     """We start with empty list [], if loop then once user id is verified we then add +1 to counter 
@@ -27,13 +27,13 @@ if __name__ == "__main__":
     completed_tasks = []
     for task in todos:
         if int(uid) == task.get('userId'):
-            all_tasks += 1
+            TOTAL_NUMBER_OF_TASKS += 1
             if task.get('completed') is True:
-                done_tasks += 1
+                NUMBER_OF_DONE_TASKS += 1
                 completed_tasks.append(task)
 
-    print('Employee {} is done with tasks({}/{}):'.format(name, done_tasks,
-                                                          all_tasks))
+    print('Employee {} is done with tasks({}/{}):'.format(EMPLOYEE_NAME, NUMBER_OF_DONE_TASKS,
+                                                          TOTAL_NUMBER_OF_TASKS))
 
     """Print all completed tasks' titles"""
     for task in completed_tasks:
