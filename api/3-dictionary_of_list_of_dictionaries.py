@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Module that gets information of an employee's TODO list progress
 based on the ID given and converts it to CSV format"""
+
 import json
 import requests
 from sys import argv
