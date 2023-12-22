@@ -1,12 +1,10 @@
 #!/usr/bin/python3
-"""Module that gets information of an employee's TODO list progress
-based on the ID given and converts it to CSV format"""
-
 import json
 import requests
 from sys import argv
 
-
+"""Module that gets information of an employee's TODO list progress
+based on the ID given and converts it to CSV format"""
 if __name__ == "__main__":
     uid = argv[1]
     user_url = "https://jsonplaceholder.typicode.com/users/{}".format(uid)

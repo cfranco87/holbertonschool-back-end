@@ -1,13 +1,9 @@
 #!/usr/bin/python3
-"""Module using api to get to do list from employee"""
-"""module that to access command line args"""
-
 import requests
-import sys
 from sys import argv
 
-
-
+"""Module using api to get to do list from employee"""
+"""module that to access command line args"""
 """check its the main file and not an import"""
 if __name__ == "__main__":
     """retrieve command line arg when running script"""

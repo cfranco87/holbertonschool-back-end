@@ -1,13 +1,9 @@
 #!/usr/bin/python3
-"""Module using api to get to do list from employee
--module that to access command line args
--CSV format for storing tubalar data(number and text)"""
-
 import csv
 import requests
 from sys import argv
 
-
+"""-CSV format for storing tubalar data(number and text)"""
 """check its the main file and not an import"""
 if __name__ == "__main__":
     """retrieve command line arg when running script"""
@@ -29,7 +25,7 @@ if __name__ == "__main__":
     for task in todos:
         """empty dict for row on table"""
         row = {}
-        """ organizes the data retrieved from the user's TODO list 
+        """ organizes the data retrieved from the user's TODO list
         into a structure suitable for CSV export"""
         row["USER_ID"] = task.get("userId")
         row["USERNAME"] = username
@@ -40,7 +36,7 @@ if __name__ == "__main__":
 
     """codeblock responsible with opening CSV file"""
     with open("{}.csv".format(uid), "w") as csv_file:
-        """It is specifically designed for writing dictionaries to CSV files."""
+        """Its for designed for writing dictionaries to CSV files"""
         csv_ins = csv.DictWriter(csv_file, fieldnames=fieldnames,
                                  quoting=csv.QUOTE_ALL)
         """line writes multiple rows to the CSV file"""
