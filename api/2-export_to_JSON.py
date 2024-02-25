@@ -1,32 +1,25 @@
 #!/usr/bin/python3
-import json
+"""Python script to export data in the JSON format"""
 import requests
 from sys import argv
+import json
 
-"""Module that gets information of an employee's TODO list progress
-based on the ID given and converts it to CSV format"""
+
 if __name__ == "__main__":
-    uid = argv[1]
-    user_url = "https://jsonplaceholder.typicode.com/users/{}".format(uid)
-    task_url = user_url + "/todos"
+    employee_id = argv[1]
+    task_list = []
 
-    """Get the JSON dictionaries for requested user and all TODOs"""
-    user = requests.get(user_url).json()
-    todos = requests.get(task_url).json()
+    employee = requests.get(
+        f"https://jsonplaceholder.typicode.com/users/{employee_id}")
+    employee_todos = requests.get(
+        f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos")
 
-    username = user.get("username")
+    for task in employee_todos.json():
+        task_dict = {"task": task["title"], "completed": task["completed"],
+                     "username": employee.json()["username"]}
+        task_list.append(task_dict)
 
-    """Create a list to later convert to JSON format"""
-    dict_list = []
-    for task in todos:
-        row = {}
-        row["task"] = task.get("title")
-        row["completed"] = task.get("completed")
-        row["username"] = username
-        dict_list.append(row)
-    json_dict = {}
-    json_dict[uid] = dict_list
+    employee_task_dict = {f"{employee_id}": task_list}
 
-    """Convert list to JSON file"""
-    with open("{}.json".format(uid), "w") as json_file:
-        json_file.write(json.dumps(json_dict))
+    with open(f'{argv[1]}.json', 'w', encoding='utf-8') as file:
+        json.dump(employee_task_dict, file)
