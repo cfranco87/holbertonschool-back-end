@@ -1,21 +1,32 @@
 #!/usr/bin/python3
-"""function to gather the data from API"""
-
+""" USING A REST API THAT RETURN INFORMATION """
 import requests
 from sys import argv
 
+if __name__ == "__main__":
+    """ prints info about employee """
 
-if __name__ == '__main__':
+    employee = requests.get("http://jsonplaceholder.typicode.com/users?id={}"
+                            .format(argv[1]))
+    all_tks_user = requests.get(
+        "http://jsonplaceholder.typicode.com/todos?userId={}".format(argv[1]))
+    try:
+        name = employee.json()
+        all_t = all_tks_user.json()
 
-    api_url = f'https://jsonplaceholder.typicode.com/'
+    except ValueError:
+        print("Not Valid JSON")
 
-    user_id = (argv[1])
-    user_data = requests.get(api_url + f'users/{user_id}').json()
-    task_todo = requests.get(api_url + f'users/{user_id}/todos').json()
-    completed_task = [task for task in task_todo if task['completed']]
+    task_complete = 0
+    complete = []
 
-    print(f'Employee {user_data["name"]} is done with', end='')
-    print(f' task({len(completed_task)}/{len(task_todo)}):')
+    for task in all_t:
+        if task.get("completed") is True:
+            task_complete += 1
+            complete.append(task.get("title"))
 
-    for tasks in completed_task:
-        print("\t" + tasks["title"])
+    print("Employee {} is done with tasks({}/{}):"
+          .format(name[0].get("name"), task_complete, len(all_t)))
+
+    for title in complete:
+        print("\t {}".format(title))
