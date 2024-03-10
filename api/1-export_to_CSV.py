@@ -1,19 +1,31 @@
 #!/usr/bin/python3
-"""export data in the CSV format"""
-import requests
+"""coments"""
+
+
+from requests import get
 from sys import argv
+import csv
+
 
 if __name__ == "__main__":
-    employee_id = argv[1]
+    response = get('https://jsonplaceholder.typicode.com/todos/')
+    data = response.json()
+    ourdata = []
+    response2 = get('https://jsonplaceholder.typicode.com/users/')
+    data2 = response2.json()
 
-    employee = (requests.get(
-        f"https://jsonplaceholder.typicode.com/users/{employee_id}"))
-    employee_todos = requests.get(
-        f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos")
+    for x in data2:
+        if x['id'] == int(argv[1]):
+            employee = x['username']
 
-    employee_username = employee.json()['username']
+    with open(argv[1] + '.csv', 'w', newline='') as f:
+        writ = csv.writer(f, quoting=csv.QUOTE_ALL)
 
-    with open(f'{argv[1]}.csv', 'w') as file:
-        for task in employee_todos.json():
-            file.write(f'"{employee_id}","{employee_username}"'
-                       f',"{task["""completed"""]}","{task["""title"""]}"\n')
+        for x in data:
+            ourdata = []
+            if x['userId'] == int(argv[1]):
+                ourdata.append(x['userId'])
+                ourdata.append(employee)
+                ourdata.append(x['completed'])
+                ourdata.append(x['title'])
+                writ.writerow(ourdata)

@@ -1,34 +1,31 @@
 #!/usr/bin/python3
-"""Module that gets information of an employee's TODO list progress
-based on the ID given and converts it to CSV format"""
+"""coments"""
 
+
+from requests import get
 import json
-import requests
-from sys import argv
 
+if __name__ == '__main__':
+    response = get('https://jsonplaceholder.typicode.com/todos/')
+    data = response.json()
 
-if __name__ == "__main__":
-    user_url = "https://jsonplaceholder.typicode.com/users"
+    ourdata = []
+    response2 = get('https://jsonplaceholder.typicode.com/users/')
+    data2 = response2.json()
 
-    """Get the JSON dictionaries for users"""
-    users = requests.get(user_url).json()
-    json_dict = {}
+    new_dict1 = {}
 
-    """Create a list to later add it to a dict to convert to JSON format"""
-    for user in users:
-        uid = user.get('id')
-        task_url = user_url + "/{}/todos".format(uid)
-        todos = requests.get(task_url).json()
-        username = user.get("username")
-        dict_list = []
-        for task in todos:
-            task_dict = {}
-            task_dict["username"] = username
-            task_dict["task"] = task.get("title")
-            task_dict["completed"] = task.get("completed")
-            dict_list.append(task_dict)
-        json_dict[uid] = dict_list
+    for x in data2:
+        ourdata = []
+        for i in data:
+            new_dict2 = {}
+            if x['id'] == i['userId']:
+                new_dict2['username'] = x['username']
+                new_dict2['task'] = i['title']
+                new_dict2['completed'] = i['completed']
+                ourdata.append(new_dict2)
+        new_dict1[x['id']] = ourdata
 
-    """Convert list to JSON file"""
-    with open("todo_all_employees.json".format(uid), "w") as json_file:
-        json_file.write(json.dumps(json_dict))
+    with open("todo_all_employees.json", 'w') as file:
+        json_obj = json.dumps(new_dict1)
+        file.write(json_obj)

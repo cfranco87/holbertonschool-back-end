@@ -1,25 +1,35 @@
 #!/usr/bin/python3
-"""Python script to export data in the JSON format"""
-import requests
+"""comentss"""
+from requests import get
 from sys import argv
 import json
 
+if __name__ == '__main__':
+    response = get('https://jsonplaceholder.typicode.com/todos/')
+    data = response.json()
 
-if __name__ == "__main__":
-    employee_id = argv[1]
-    task_list = []
+    ourdata = []
+    response2 = get('https://jsonplaceholder.typicode.com/users/')
+    data2 = response2.json()
 
-    employee = requests.get(
-        f"https://jsonplaceholder.typicode.com/users/{employee_id}")
-    employee_todos = requests.get(
-        f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos")
+    for x in data2:
+        if x['id'] == int(argv[1]):
+            employee = x['username']
+            id_no = x['id']
 
-    for task in employee_todos.json():
-        task_dict = {"task": task["title"], "completed": task["completed"],
-                     "username": employee.json()["username"]}
-        task_list.append(task_dict)
+    ourdata = []
 
-    employee_task_dict = {f"{employee_id}": task_list}
+    for x in data:
+        new_dict = {}
+        if x['userId'] == int(argv[1]):
+            new_dict['username'] = employee
+            new_dict['task'] = x['title']
+            new_dict['completed'] = x['completed']
+            ourdata.append(new_dict)
 
-    with open(f'{argv[1]}.json', 'w', encoding='utf-8') as file:
-        json.dump(employee_task_dict, file)
+    final_dict = {}
+    final_dict[id_no] = ourdata
+    json_obj = json.dumps(final_dict)
+
+    with open(argv[1] + '.json', 'w') as file:
+        file.write(json_obj)

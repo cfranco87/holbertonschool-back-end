@@ -1,32 +1,34 @@
 #!/usr/bin/python3
-""" USING A REST API THAT RETURN INFORMATION """
-import requests
+"""comments"""
+
+
+from requests import get
 from sys import argv
 
+
 if __name__ == "__main__":
-    """ prints info about employee """
+    response = get('https://jsonplaceholder.typicode.com/todos/')
+    data = response.json()
+    completed = 0
+    total = 0
+    tasks = []
+    response2 = get('https://jsonplaceholder.typicode.com/users/')
+    data2 = response2.json()
 
-    employee = requests.get("http://jsonplaceholder.typicode.com/users?id={}"
-                            .format(argv[1]))
-    all_tks_user = requests.get(
-        "http://jsonplaceholder.typicode.com/todos?userId={}".format(argv[1]))
-    try:
-        name = employee.json()
-        all_t = all_tks_user.json()
+    for i in data2:
+        if i.get('id') == int(argv[1]):
+            employee = i.get('name')
 
-    except ValueError:
-        print("Not Valid JSON")
+    for i in data:
+        if i.get('userId') == int(argv[1]):
+            total += 1
 
-    task_complete = 0
-    complete = []
+            if i.get('completed') is True:
+                completed += 1
+                tasks.append(i.get('title'))
 
-    for task in all_t:
-        if task.get("completed") is True:
-            task_complete += 1
-            complete.append(task.get("title"))
+    print("Employee {} is done with tasks({}/{}):".format(employee,
+                                                          completed, total))
 
-    print("Employee {} is done with tasks({}/{}):"
-          .format(name[0].get("name"), task_complete, len(all_t)))
-
-    for title in complete:
-        print("\t {}".format(title))
+    for i in tasks:
+        print("\t {}".format(i))
